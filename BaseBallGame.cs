@@ -1,30 +1,49 @@
-public class Solution {
-    public int CalPoints(string[] operations) {
-        for(int i=0;i<operations.Length;i++){
-            string j=operations[i];
-            string[] score = new string[] {};
-        switch(j){
-            case "C":
-                score.RemoveAt(i-1);
-                break;
-            case "D":
-                for(k=score.Length;k>0;k--){
-                  score[i]=score[k] * 2;
-                    break;
+using System;
+using System.Collections.Generic;
+
+namespace BaseBall
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            string[] ops = new string[] { "5", "2", "C", "D", "+" };
+            int result=CalPoints(ops);
+            Console.WriteLine("Game Sum is:{0}", result);
+            Console.ReadLine();
+        }
+
+        public static int CalPoints(string[] operations)
+        {
+            Stack<int> result = new Stack<int>();
+            foreach (string operation in operations)
+            {
+                switch (operation)
+                {
+                    case "D":
+                        result.Push(result.Peek() * 2);
+                        break;
+                    case "+":
+                        var lastElement = result.Pop();
+                        var newElement = lastElement + result.Peek();
+                        result.Push(lastElement);
+                        result.Push(newElement);
+                        break;
+                    case "C":
+                        result.Pop();
+                        break;
+                    default:
+                        result.Push(Convert.ToInt32(operation));
+                        break;
                 }
-                break;
-            case "+":
-                for(k=score.Length;k>0;k--){
-                  score[i]=score[k]+score[k-1];
-                    break;
-                }
-                break;
-            default:
-                score[i]=operations[i];
-                break;
-                
-                
             }
+            int sum = 0;
+            while (result.Count > 0)
+            {
+                sum += result.Pop();
+            }
+            return sum;
         }
     }
 }
